@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import { Button, Media } from "react-bootstrap";
-import { List, ListRowProps, ListRowRenderer } from "react-virtualized";
 import "./Vehicles.css";
 
 const vehicles = [
@@ -52,26 +50,27 @@ const vehicles = [
 ];
 
 export const Vehicles = () => {
-  function rowRenderer({
-    key, // Unique key within array of rows
-    index, // Index of row within collection
-    // isScrolling, // The List is currently being scrolled
-    // isVisible, // This row is visible within the List (eg it is not an overscanned row)
-    style, // Style object to be applied to row (to position it)
-  }: ListRowProps) {
+  const itemTemplate = (item: any) => {
     return (
-      <div key={key} style={style}>
-        {vehicles[index]}
+      <div className="list-item">
+        <div className="vehicle-entry">
+          <img width={64} height={64} className="mr-3" src={item.image} />
+          <h4>{item.model}</h4>
+        </div>
+        <div style={{ paddingRight: 15 }}>
+          <i className="pi pi-arrow-right" style={{ fontSize: "1.4em" }}></i>
+        </div>
       </div>
     );
-  }
+  };
+
   return (
-    <List
-      width={300}
-      height={300}
-      rowCount={vehicles.length}
-      rowHeight={20}
-      rowRenderer={rowRenderer}
-    />
+    <div></div>
+    // <DataScroller
+    //   value={vehicles}
+    //   itemTemplate={itemTemplate}
+    //   rows={5}
+    //   buffer={0.4}
+    // />
   );
 };

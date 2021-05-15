@@ -19,12 +19,12 @@ router.post(
     const {
       rows: [user],
     } = await pool.query({
-      text: "SELECT password FROM employees where email=$1",
+      text: "SELECT password FROM users where email=$1",
       values: [email],
     });
 
     if (!user) {
-      throw new HTTPError(403, "could not find user");
+      throw new Error("Пользователя с таким email не существует!");
     }
 
     console.log("password", password);
@@ -34,7 +34,7 @@ router.post(
       throw new Error("bad password");
     }
 
-    res.send({});
+    res.sendStatus(200);
   }
 );
 

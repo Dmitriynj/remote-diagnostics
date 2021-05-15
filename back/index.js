@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const mountRoutes = require("./routes");
 
@@ -9,6 +10,8 @@ const HTTP_PORT = 8000;
 app.listen(HTTP_PORT, () => {
   console.log("Server running on port %PORT%".replace("%PORT%", HTTP_PORT));
 });
+
+app.use(cors());
 // Root endpoint
 app.get("/", (req, res, next) => {
   res.json({ message: "Ok" });

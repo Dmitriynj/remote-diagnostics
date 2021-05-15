@@ -1,17 +1,17 @@
-import React, { useMemo, createContext, useState } from "react";
+import React, { useMemo, createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { Emitter } from "./Emitter";
+import { AxiosError } from "axios";
+import { handleError } from "./errorHandler";
 
-interface AppContext {
+export interface AppContext {
   error: {
     message: string;
     error?: Error;
   } | null;
   loading: boolean;
   user: {
-    id: string;
     email: string;
-    accessToken: string;
-    refreshToken: string;
   };
   pageName: string;
   setLoading: (val: boolean) => void;
@@ -23,10 +23,7 @@ const initialContext = {
   error: null,
   loading: false,
   user: {
-    id: "",
     email: "",
-    accessToken: "",
-    refreshToken: "",
   },
   pageName: "Автопарк",
   setLoading: () => {},
@@ -45,13 +42,24 @@ const AppStateContextProvider = ({
   const [error, setError] = useState(initialContext.error);
   const [user, setUser] = useState(initialContext.user);
 
+  useEffect(() => {
+    Emitter.on("LOADING", (val: boolean) => setLoading(val));
+    Emitter.on("ERROR", (error: AxiosError) =>
+      setError(handleError(error) as any)
+    );
+
+    return () => {
+      Emitter.off("LOADING");
+      Emitter.off("ERROR");
+    };
+  }, []);
+
   const value = useMemo(
     () =>
       ({
         error,
         loading,
         user,
-        setLoading,
         setError,
         setUser,
       } as AppContext),

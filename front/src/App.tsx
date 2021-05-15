@@ -1,16 +1,16 @@
 import React from "react";
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import MyRouter from "./components/MyRouter";
 import { AppStateContextProvider } from "./helpers/AppContext";
+import { initDefaults } from "./helpers/axios_defaults";
+
+initDefaults();
 
 function App() {
   return (
-    <div className="App">
-      <AppStateContextProvider>
-        <MyRouter />
-      </AppStateContextProvider>
-    </div>
+    <AppStateContextProvider>
+      <MyRouter />
+    </AppStateContextProvider>
   );
 }
 

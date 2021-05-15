@@ -1,63 +1,38 @@
-import React, { useEffect } from "react";
-import { Button, Form, InputGroup } from "react-bootstrap";
-import { Formik } from "formik";
-import * as yup from "yup";
-import { useAppState } from "../helpers/use_app_state";
-import "./login.css";
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 
-const schema = yup.object().shape({
-  email: yup.string().email(),
-  password: yup.string(),
-});
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+      width: "25ch",
+    },
+  },
+}));
 
 export const Login = () => {
-  useEffect(() => {}, []);
+  const classes = useStyles();
 
   return (
-    <Formik
-      validationSchema={schema}
-      onSubmit={(values) => {
-        console.log("something", values);
-      }}
-      initialValues={{
-        password: "",
-        email: "",
-      }}
-    >
-      {({ handleSubmit, handleChange, values }) => (
-        <Form noValidate onSubmit={handleSubmit}>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>Адрес электронной почты</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Ввведите адрес"
-              name="email"
-              value={values.email}
-              onChange={handleChange}
-            />
-            <Form.Text className="text-muted">
-              Никогда не сообщайте никому свой адрес электронной почты.
-            </Form.Text>
-          </Form.Group>
-
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>Пароль</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Пароль"
-              name="password"
-              value={values.password}
-              onChange={handleChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Сохранить пароль?" />
-          </Form.Group>
-          <Button size="lg" block variant="primary" type="submit">
-            Войти
-          </Button>
-        </Form>
-      )}
-    </Formik>
+    <form className={classes.root} noValidate autoComplete="off">
+      <TextField
+        id="standard-secondary"
+        label="Standard secondary"
+        color="secondary"
+      />
+      <TextField
+        id="filled-secondary"
+        label="Filled secondary"
+        variant="filled"
+        color="secondary"
+      />
+      <TextField
+        id="outlined-secondary"
+        label="Outlined secondary"
+        variant="outlined"
+        color="secondary"
+      />
+    </form>
   );
 };
