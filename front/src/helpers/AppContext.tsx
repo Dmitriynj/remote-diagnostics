@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 interface AppContext {
   error: {
     message: string;
-    error: Error;
+    error?: Error;
   } | null;
   loading: boolean;
   user: {
@@ -17,7 +17,6 @@ interface AppContext {
   setLoading: (val: boolean) => void;
   setError: (val: AppContext["error"]) => void;
   setUser: (val: AppContext["user"]) => void;
-  setPageName: (val: string) => void;
 }
 
 const initialContext = {
@@ -33,7 +32,6 @@ const initialContext = {
   setLoading: () => {},
   setError: () => {},
   setUser: () => {},
-  setPageName: () => {},
 };
 
 const AppStateContext = createContext<AppContext>(initialContext);
@@ -46,7 +44,6 @@ const AppStateContextProvider = ({
   const [loading, setLoading] = useState(initialContext.loading);
   const [error, setError] = useState(initialContext.error);
   const [user, setUser] = useState(initialContext.user);
-  const [pageName, setPageName] = useState(initialContext.pageName);
 
   const value = useMemo(
     () =>
@@ -54,13 +51,11 @@ const AppStateContextProvider = ({
         error,
         loading,
         user,
-        pageName,
         setLoading,
         setError,
         setUser,
-        setPageName,
       } as AppContext),
-    [user, loading, error, pageName]
+    [user, loading, error]
   );
 
   return (

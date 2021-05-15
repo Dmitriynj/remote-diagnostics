@@ -7,14 +7,24 @@ import {
   Navbar,
   NavDropdown,
 } from "react-bootstrap";
-import { useAppState } from "../helpers/use_app_state";
+import { useLocation } from "react-router-dom";
+interface PageName {
+  [key: string]: string;
+}
+
+const PAGE_NAME: PageName = {
+  "/login": "Вход в систему",
+  "/vehicles": "Весь автопарк",
+};
 
 export const NavBar = () => {
-  const { pageName } = useAppState();
+  const location = useLocation();
 
   return (
     <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="#home">{pageName}</Navbar.Brand>
+      <Navbar.Brand href="#home">
+        {PAGE_NAME[location.pathname || ""]}
+      </Navbar.Brand>
       {/* <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">

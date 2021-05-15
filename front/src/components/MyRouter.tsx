@@ -11,6 +11,8 @@ import "./NavBar.css";
 import { useAppState } from "../helpers/use_app_state";
 import { Login } from "../pages/login";
 import { NavBar } from "./NavBar";
+import { ErrorHolder } from "./ErrorHolder";
+import { Vehicles } from "../pages/Vehicles";
 
 export default function App() {
   const { user } = useAppState();
@@ -20,17 +22,27 @@ export default function App() {
   return (
     <Router>
       <NavBar />
-
+      <ErrorHolder />
       <div className="content">
         <Switch>
-          <Route path="/login">About</Route>
-          <Route path="/users">Users</Route>
-          <Route path="/home">Home</Route>
+          <Route exact path="/vehicles">
+            <Vehicles />
+          </Route>
+          <Route exact path="/login">
+            <Login />
+          </Route>
           <Route
-            render={() =>
-              !isAuthenticated ? <Login /> : <Redirect to="home" />
-            }
+            render={() => {
+              return !isAuthenticated ? (
+                <Redirect to="/vehicles" />
+              ) : (
+                <Redirect to="/vehicles" />
+              );
+            }}
           />
+          <Route>
+            <Redirect to="/vehicles" />
+          </Route>
         </Switch>
       </div>
     </Router>

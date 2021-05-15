@@ -11,11 +11,7 @@ const schema = yup.object().shape({
 });
 
 export const Login = () => {
-  const { setPageName } = useAppState();
-
-  useEffect(() => {
-    setPageName("Вход в систему");
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <Formik
@@ -28,15 +24,7 @@ export const Login = () => {
         email: "",
       }}
     >
-      {({
-        handleSubmit,
-        handleChange,
-        handleBlur,
-        values,
-        touched,
-        isValid,
-        errors,
-      }) => (
+      {({ handleSubmit, handleChange, values }) => (
         <Form noValidate onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Адрес электронной почты</Form.Label>
