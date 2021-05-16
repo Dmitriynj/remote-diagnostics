@@ -1,10 +1,10 @@
 const Router = require("express-promise-router");
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const pool = require("../pool");
 
 const router = new Router();
-// export our router to be mounted by the parent application
 
 router.post(
   "/login",
@@ -19,22 +19,33 @@ router.post(
     const {
       rows: [user],
     } = await pool.query({
-      text: "SELECT password FROM users where email=$1",
+      text: "SELECT password, avatar FROM users where email=$1",
       values: [email],
     });
 
     if (!user) {
-      throw new Error("Пользователя с таким email не существует!");
+      res.send("Пользователя с таким email не существует!", 404);
+      return;
     }
 
     console.log("password", password);
     console.log("user.password", user.password);
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
-      throw new Error("bad password");
+      res.send("Неверный пароль!", 401);
+      return;
     }
 
-    res.sendStatus(200);
+    const accessToken = jwt.sign(
+      { id: user.id, email },
+      process.env.TOKEN_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+    console.log("avatar", user.avatar);
+
+    res.json({ accessToken, avatar: user.avatar });
   }
 );
 

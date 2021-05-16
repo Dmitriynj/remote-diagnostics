@@ -1,6 +1,5 @@
 import { Container } from "@material-ui/core";
-import React, { useEffect } from "react";
-// import { Container } from "react-bootstrap";
+import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,40 +8,46 @@ import {
 } from "react-router-dom";
 import { useAppState } from "../helpers/use_app_state";
 import { Login } from "../pages/Login";
-// import { ErrorHolder } from "./ErrorHolder";
-// import { Vehicles } from "../pages/Vehicles";
+import { VehicleDetails } from "../pages/VehicleDetails";
+import { Vehicles } from "../pages/Vehicles";
+import { AlertHolder } from "./AlertHolder";
 import { PageHeader } from "./PageHeader";
+import { Sidebar } from "./Sidebar";
 
-export default function App() {
+const PrivateRoute = ({ component, ...rest }: any) => {
   const { user } = useAppState();
-  const isAuthenticated = user.email;
 
+  console.log("user.isAuth", user.isAuth);
+
+  const routeComponent = (props: any) => {
+    return !user.isAuth ? (
+      <Redirect to="/login" />
+    ) : (
+      React.createElement(component, props)
+    );
+  };
+
+  return <Route {...rest} render={routeComponent} />;
+};
+
+export default function MyRouter() {
   return (
-    <Container maxWidth="sm">
-      <Router>
-        <PageHeader />
-
-        <div className="content">{/* <ErrorHolder /> */}</div>
-        <Switch>
-          <Route exact path="/vehicles">
-            {/* <Vehicles /> */}
-          </Route>
-          <Route exact path="/login">
-            <div className="content">
-              <Login />
-            </div>
-          </Route>
-          <Route
-            render={() => {
-              return !isAuthenticated ? (
-                <Redirect to="/login" />
-              ) : (
-                <Redirect to="/vehicles" />
-              );
-            }}
-          />
-        </Switch>
-      </Router>
-    </Container>
+    <Router>
+      <PageHeader />
+      <Sidebar />
+      <AlertHolder />
+      <Switch>
+        <PrivateRoute exact path="/vehicles" component={Vehicles} />
+        <PrivateRoute exact path="/vehicles/:id" component={VehicleDetails} />
+        <Route exact path="/login">
+          <Container maxWidth="sm">
+            <Login />
+          </Container>
+        </Route>
+        <Route>
+          <Redirect to="/vehicles" />
+        </Route>
+      </Switch>
+    </Router>
   );
 }

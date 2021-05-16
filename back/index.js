@@ -12,16 +12,16 @@ app.listen(HTTP_PORT, () => {
 });
 
 app.use(cors());
-// Root endpoint
-app.get("/", (req, res, next) => {
-  res.json({ message: "Ok" });
-});
 app.use(express.json());
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
+// Root endpoint
+app.get("/", (req, res, next) => {
+  res.json({ message: "Ok" });
+});
 
 mountRoutes(app);
 // Insert here other API endpoints
