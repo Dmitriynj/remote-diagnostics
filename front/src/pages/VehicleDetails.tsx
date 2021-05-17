@@ -57,7 +57,7 @@ export const VehicleDetails = () => {
   const classes = useStyles();
   const location = useLocation();
   const vehicle = (location as any).state.detail;
-  const [tabNum, setTabNum] = useState(1);
+  const [tabNum, setTabNum] = useState(0);
 
   const handleChange = (event: any, newValue: any) => setTabNum(newValue);
 

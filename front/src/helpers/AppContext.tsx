@@ -19,6 +19,7 @@ export interface AppContext {
     accessToken: string;
     isAuth: boolean;
     avatar: string;
+    role: string;
   };
   pageName: string;
   sidebarOpened: boolean;
@@ -36,6 +37,7 @@ export const initialContext = {
     accessToken: "",
     isAuth: false,
     avatar: "",
+    role: "",
   },
   pageName: "Автопарк",
   sidebarOpened: false,

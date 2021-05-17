@@ -2,10 +2,10 @@ import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useAppState } from "../helpers/use_app_state";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import { Box, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { instance } from "../helpers/axios_defaults";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,12 +44,13 @@ export const Login = () => {
       })
       .then((response) => {
         console.log("login success", response.data);
-        const { accessToken, avatar } = response.data;
+        const { accessToken, avatar, role } = response.data;
         setUser({
           email,
           accessToken,
           isAuth: true,
           avatar,
+          role,
         });
       });
   };

@@ -19,7 +19,7 @@ router.post(
     const {
       rows: [user],
     } = await pool.query({
-      text: "SELECT password, avatar FROM users where email=$1",
+      text: "SELECT password, avatar, role FROM users where email=$1",
       values: [email],
     });
 
@@ -37,7 +37,7 @@ router.post(
     }
 
     const accessToken = jwt.sign(
-      { id: user.id, email },
+      { id: user.id, email, role: user.role },
       process.env.TOKEN_SECRET,
       {
         expiresIn: "1d",
@@ -45,7 +45,7 @@ router.post(
     );
     console.log("avatar", user.avatar);
 
-    res.json({ accessToken, avatar: user.avatar });
+    res.json({ accessToken, avatar: user.avatar, role: user.role });
   }
 );
 
