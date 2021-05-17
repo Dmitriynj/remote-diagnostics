@@ -30,8 +30,6 @@ router.get(
     const { rows } = await pool.query(
       `SELECT * FROM vehicles v
 	      JOIN vehicle_details vd ON vd.vehicle_id = v.id 
-		    LEFT JOIN vehicle_issue vi ON vi.vehicle_id = vd.vehicle_id
-		    LEFT JOIN issues i ON vi.issue_id = i.id
 		    where v.id=$1`,
       [id]
     );
@@ -39,6 +37,32 @@ router.get(
     console.log("queryRes", rows);
 
     res.send(rows[0]);
+  }
+);
+
+router.get(
+  "/vehicle-errors/:id",
+  [authenticateJWT, [check("id").exists()]],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.sendStatus("Неверные параметры запроса.", 400);
+    }
+
+    const { id } = req.params;
+
+    console.log("vehile errors");
+
+    // const { rows } = await pool.query(
+    //   `SELECT * FROM vehicles v
+    //     JOIN vehicle_details vd ON vd.vehicle_id = v.id
+    //     where v.id=$1`,
+    //   [id]
+    // );
+
+    // console.log("queryRes", rows);
+
+    res.send({});
   }
 );
 

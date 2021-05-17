@@ -11,6 +11,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import moment from "moment";
 import "moment/locale/ru";
+import { DtcLog } from "./DtcLog";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
   },
   tabStyle: {
     textTransform: "none",
+  },
+  spacer: {
+    backgroundColor: "#c5cae9",
   },
 }));
 
@@ -49,8 +53,6 @@ const ProgressIcon = ({ value }: any) => {
   );
 };
 
-const TABS = ["Текущее состояние", "О машине", "История ошибок"];
-
 export const VehicleDetails = () => {
   const classes = useStyles();
   const location = useLocation();
@@ -77,7 +79,7 @@ export const VehicleDetails = () => {
             </Typography>
           )}
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider variant="middle" component="li" />
       </React.Fragment>
     );
   };
@@ -92,6 +94,10 @@ export const VehicleDetails = () => {
     drive_unit,
     engine_type,
     imei_code,
+    engine_state,
+    mileage,
+    remaining_fuel,
+    battery_voltage,
   }: {
     drive_unit: "full" | "front" | "back";
     [key: string]: any;
@@ -99,6 +105,49 @@ export const VehicleDetails = () => {
     const list = [];
 
     const driveUnit = { full: "Полный", front: "Передний", back: "Задний" };
+
+    list.push(
+      <Box
+        height={50}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        className={classes.spacer}
+      >
+        <Typography>Текущее состояние</Typography>
+      </Box>
+    );
+
+    list.push(getRow(10, "Зажигание", engine_state === "on" ? "Вкл." : "Выкл"));
+    list.push(getRow(11, "Пробег", `${mileage} тыс. км.`));
+    list.push(
+      getRow(
+        12,
+        "Топливо",
+        remaining_fuel,
+        <ProgressIcon value={remaining_fuel} />
+      )
+    );
+    list.push(
+      getRow(
+        13,
+        "Аккумулятор",
+        battery_voltage,
+        <ProgressIcon value={Number(battery_voltage)} />
+      )
+    );
+
+    list.push(
+      <Box
+        height={50}
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        className={classes.spacer}
+      >
+        <Typography>Общая информация</Typography>
+      </Box>
+    );
 
     list.push(getRow(1, "Марка", mark));
     list.push(getRow(2, "Модель", model));
@@ -125,43 +174,6 @@ export const VehicleDetails = () => {
     return list;
   };
 
-  const getCurrentStateList = ({
-    engine_state,
-    mileage,
-    remaining_fuel,
-    battery_voltage,
-    engine_volume,
-    transmission,
-    drive_unit,
-    engine_type,
-    imei_code,
-  }: any) => {
-    const list = [];
-
-    list.push(getRow(1, "Зажигание", engine_state === "on" ? "Вкл." : "Выкл"));
-    list.push(getRow(2, "Пробег", `${mileage} тыс. км.`));
-    list.push(
-      getRow(
-        3,
-        "Топливо",
-        remaining_fuel,
-        <ProgressIcon value={remaining_fuel} />
-      )
-    );
-    list.push(getRow(4, "Аккумулятор", `${battery_voltage} В`));
-
-    return list;
-  };
-
-  const getTabs = () => {
-    return TABS.map((name) => (
-      <Tab
-        className={classes.tabStyle}
-        label={<Typography variant="body1">{name}</Typography>}
-      />
-    ));
-  };
-
   return (
     <React.Fragment>
       <Paper className={classes.tabsRoot}>
@@ -172,16 +184,25 @@ export const VehicleDetails = () => {
           textColor="primary"
           centered
         >
-          {getTabs()}
+          <Tab
+            className={classes.tabStyle}
+            label={<Typography variant="body1">О машине</Typography>}
+          />
+          <Tab
+            className={classes.tabStyle}
+            label={<Typography variant="body1">На карте</Typography>}
+          />
+          <Tab
+            className={classes.tabStyle}
+            label={<Typography variant="body1">Журнал неиспр.</Typography>}
+          />
         </Tabs>
       </Paper>
 
       {tabNum === 0 && (
-        <List className={classes.root}>{getCurrentStateList(vehicle)}</List>
-      )}
-      {tabNum === 1 && (
         <List className={classes.root}>{getGeneralInfoList(vehicle)}</List>
       )}
+      {tabNum === 2 && <DtcLog id={vehicle.id} />}
     </React.Fragment>
   );
 };
