@@ -1,7 +1,7 @@
-create table issues (
+create table dtc_codes (
 	id serial PRIMARY KEY,
 	dtc_code VARCHAR(10) NOT NULL,
-	description VARCHAR(250) NOT NULL
+	description VARCHAR(500) NOT NULL
 );
 
 create table vehicles (
@@ -28,7 +28,8 @@ create table users (
 	phone VARCHAR(50),
 	birth_date DATE,
 	avatar VARCHAR(200),
-	password VARCHAR(200)
+	password VARCHAR(200),
+	role VARCHAR(8)
 );
 
 create table vehicle_details (
@@ -58,7 +59,7 @@ create table vehicle_issue (
 	  REFERENCES vehicles(id),
     CONSTRAINT fk_issue
       FOREIGN KEY(issue_id) 
-	  REFERENCES issues(id)
+	  REFERENCES dtc_codes(id)
 );
 
 create table report (
@@ -66,7 +67,11 @@ create table report (
 	datetime DATE,
 	message VARCHAR(2000),
 	vehicle_issue_id INT,
+	user_id INT,
     CONSTRAINT fk_vehicle_issue
       FOREIGN KEY(vehicle_issue_id) 
 	  REFERENCES vehicle_issue(id)
+	CONSTRAINT fk_user
+      FOREIGN KEY(user_id) 
+	  REFERENCES user(id)
 );
