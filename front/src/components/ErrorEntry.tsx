@@ -160,21 +160,6 @@ export const ErrorEntry = ({
               </Button>
             )}
           </Box>
-
-          <Box display="flex">
-            {user.role === "employee" && (
-              <Button
-                size="small"
-                variant="outlined"
-                color="primary"
-                className={classes.assignButton}
-                disabled={disabled}
-                onClick={getReasons}
-              >
-                Назначить себя
-              </Button>
-            )}
-          </Box>
         </div>
       </AccordionDetails>
     </Accordion>
